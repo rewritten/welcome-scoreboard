@@ -87,6 +87,45 @@
       .number-choice-btn {
         @apply focus:outline-none grid place-items-center;
       }
+
+      #scoresheet:has(#tab-streets:checked) label[for="tab-streets"],
+      #scoresheet:has(#tab-city-plans:checked) label[for="tab-city-plans"] {
+        @apply text-teal-700 border-teal-600;
+      }
+
+      .objective-input {
+        @apply w-10 h-10 text-center text-sm font-bold
+               border-2 border-orange-400 rounded bg-white
+               focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400;
+      }
+
+      .contractor-step {
+        @apply w-7 h-7 text-[10px] font-semibold
+               border-2 border-amber-400 rounded
+               bg-white cursor-pointer
+               flex items-center justify-center;
+      }
+      .contractor-step:has(input:checked) {
+        @apply bg-amber-500 text-white border-amber-600;
+      }
+      .contractor-step:has(input:checked),
+      .contractor-step:not(:has(input:checked)) ~ .contractor-step {
+        @apply pointer-events-none;
+      }
+
+      .estate-step {
+        @apply w-8 h-8 text-xs font-semibold
+               border-2 border-violet-300 rounded-full
+               bg-white cursor-pointer
+               flex items-center justify-center;
+      }
+      .estate-step:has(input:checked) {
+        @apply bg-violet-500 text-white border-violet-600;
+      }
+      .estate-step:has(input:checked),
+      .estate-step:not(:has(input:checked)) ~ .estate-step {
+        @apply pointer-events-none;
+      }
     }
   </style>
 </head>
@@ -97,8 +136,32 @@
   <button id="undo-btn" type="button" class="text-sm font-medium text-amber-700 fixed top-4 right-4">
     Undo
   </button>
+
+  
   <div class="max-w-vw mx-auto px-4 py-8">
     <form id="scoresheet" autocomplete="off">
+      
+      <label for="tab-streets" class="fixed left-4 top-20 px-4 py-2 text-sm font-semibold rounded-lg border-2 border-transparent text-gray-500 cursor-pointer transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-houses" viewBox="0 0 16 16">
+          <path d="M5.793 1a1 1 0 0 1 1.414 0l.647.646a.5.5 0 1 1-.708.708L6.5 1.707 2 6.207V12.5a.5.5 0 0 0 .5.5.5.5 0 0 1 0 1A1.5 1.5 0 0 1 1 12.5V7.207l-.146.147a.5.5 0 0 1-.708-.708zm3 1a1 1 0 0 1 1.414 0L12 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l1.854 1.853a.5.5 0 0 1-.708.708L15 8.207V13.5a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 4 13.5V8.207l-.146.147a.5.5 0 1 1-.708-.708zm.707.707L5 7.207V13.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V7.207z"/>
+        </svg>
+      </label>
+
+      <label for="tab-city-plans" class="fixed left-4 top-40 px-4 py-2 text-sm font-semibold rounded-lg border-2 border-transparent text-gray-500 cursor-pointer transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
+          <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5"/>
+        </svg>
+      </label>
+
+      <!-- Tab radios -->
+      <input type="radio" name="tab" id="tab-streets" class="hidden peer/streets" checked>
+      <input type="radio" name="tab" id="tab-city-plans" class="hidden peer/city-plans">
+
+      <!-- Tab bar -->
+
+
+      <!-- ==================== TAB 1: Streets ==================== -->
+      <div class="hidden peer-checked/streets:block">
 
       <!-- ==================== Street 1 — 10 houses ==================== -->
       <section class="mb-8">
@@ -364,6 +427,128 @@
         </div>
       </section>
 
+      </div><!-- /tab streets -->
+
+      <!-- ==================== TAB 2: City Plans ==================== -->
+      <div class="hidden peer-checked/city-plans:block">
+
+        <!-- Game Objectives -->
+        <section class="mb-8">
+          <h3 class="text-sm font-semibold text-orange-700 text-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="inline -mt-0.5 mr-1" viewBox="0 0 16 16">
+              <path d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022M6 8.694 1 10.36V15h5zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5z"/>
+              <path d="M2 11h1v1H2zm2 0h1v1H4zm-2 2h1v1H2zm2 0h1v1H4zm4-4h1v1H8zm2 0h1v1h-1zm-2 2h1v1H8zm2 0h1v1h-1zm2-2h1v1h-1zm0 2h1v1h-1zM8 7h1v1H8zm2 0h1v1h-1zm2 0h1v1h-1zM8 5h1v1H8zm2 0h1v1h-1zm2 0h1v1h-1zm0-2h1v1h-1z"/>
+            </svg>
+            Objectives
+          </h3>
+          <div class="flex items-center justify-center gap-6">
+            <div class="flex flex-col items-center">
+              <span class="text-[10px] text-gray-500 mb-1">n°1</span>
+              <button type="button" name="obj-1" class="objective-input"></button>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-[10px] text-gray-500 mb-1">n°2</span>
+              <button type="button" name="obj-2" class="objective-input"></button>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-[10px] text-gray-500 mb-1">n°3</span>
+              <button type="button" name="obj-3" class="objective-input"></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contractors (Temp Agency) -->
+        <section class="mb-8">
+          <h3 class="text-sm font-semibold text-amber-700 text-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="inline -mt-0.5 mr-1" viewBox="0 0 16 16">
+              <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+            </svg>
+            Contractors
+          </h3>
+          <div class="flex items-center justify-center gap-1">
+            <label class="contractor-step"><input type="checkbox" name="ctr-1" class="hidden">1</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-2" class="hidden">2</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-3" class="hidden">3</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-4" class="hidden">4</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-5" class="hidden">5</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-6" class="hidden">6</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-7" class="hidden">7</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-8" class="hidden">8</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-9" class="hidden">9</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-10" class="hidden">10</label>
+            <label class="contractor-step"><input type="checkbox" name="ctr-11" class="hidden">11</label>
+          </div>
+        </section>
+
+        <!-- Real Estate — fenced-area upgrade gauges -->
+        <section class="mb-8">
+          <h3 class="text-sm font-semibold text-violet-700 text-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="inline -mt-0.5 mr-1" viewBox="0 0 16 16">
+              <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
+            </svg>
+            Real Estate
+          </h3>
+          <div class="space-y-2">
+
+            <!-- Size 1 -->
+            <div class="flex items-center justify-center gap-2">
+              <span class="w-6 text-right text-xs font-medium text-violet-600">1</span>
+              <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">1</span>
+              <label class="estate-step"><input type="checkbox" name="est1-1" class="hidden">3</label>
+            </div>
+
+            <!-- Size 2 -->
+            <div class="flex items-center justify-center gap-2">
+              <span class="w-6 text-right text-xs font-medium text-violet-600">2</span>
+              <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">2</span>
+              <label class="estate-step"><input type="checkbox" name="est2-1" class="hidden">3</label>
+              <label class="estate-step"><input type="checkbox" name="est2-2" class="hidden">4</label>
+            </div>
+
+            <!-- Size 3 -->
+            <div class="flex items-center justify-center gap-2">
+              <span class="w-6 text-right text-xs font-medium text-violet-600">3</span>
+              <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">3</span>
+              <label class="estate-step"><input type="checkbox" name="est3-1" class="hidden">4</label>
+              <label class="estate-step"><input type="checkbox" name="est3-2" class="hidden">5</label>
+              <label class="estate-step"><input type="checkbox" name="est3-3" class="hidden">6</label>
+            </div>
+
+            <!-- Size 4 -->
+            <div class="flex items-center justify-center gap-2">
+              <span class="w-6 text-right text-xs font-medium text-violet-600">4</span>
+              <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">4</span>
+              <label class="estate-step"><input type="checkbox" name="est4-1" class="hidden">5</label>
+              <label class="estate-step"><input type="checkbox" name="est4-2" class="hidden">6</label>
+              <label class="estate-step"><input type="checkbox" name="est4-3" class="hidden">7</label>
+              <label class="estate-step"><input type="checkbox" name="est4-4" class="hidden">8</label>
+            </div>
+
+            <!-- Size 5 -->
+            <div class="flex items-center justify-center gap-2">
+              <span class="w-6 text-right text-xs font-medium text-violet-600">5</span>
+              <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">5</span>
+              <label class="estate-step"><input type="checkbox" name="est5-1" class="hidden">6</label>
+              <label class="estate-step"><input type="checkbox" name="est5-2" class="hidden">7</label>
+              <label class="estate-step"><input type="checkbox" name="est5-3" class="hidden">8</label>
+              <label class="estate-step"><input type="checkbox" name="est5-4" class="hidden">10</label>
+            </div>
+
+            <!-- Size 6 -->
+            <div class="flex items-center justify-center gap-2">
+              <span class="w-6 text-right text-xs font-medium text-violet-600">6</span>
+              <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">6</span>
+              <label class="estate-step"><input type="checkbox" name="est6-1" class="hidden">7</label>
+              <label class="estate-step"><input type="checkbox" name="est6-2" class="hidden">8</label>
+              <label class="estate-step"><input type="checkbox" name="est6-3" class="hidden">10</label>
+              <label class="estate-step"><input type="checkbox" name="est6-4" class="hidden">12</label>
+            </div>
+
+          </div>
+        </section>
+
+      </div><!-- /tab city-plans -->
+
     </form>
   </div>
 
@@ -511,6 +696,32 @@
         dialog.addEventListener('close', onClose);
         dialog.showModal();
     } )}
+
+    // Objective buttons (simple number picker, no ordering constraints)
+    for (let btn of document.querySelectorAll('button.objective-input')) {
+      btn.addEventListener('click', function () {
+        if (btn.textContent) return;
+        var dialog = document.getElementById('number-choice');
+        dialog.returnValue = '';
+        for (let numberBtn of dialog.querySelectorAll('.number-choice-btn')) {
+          numberBtn.textContent = numberBtn.value;
+          numberBtn.classList.remove('opacity-10', 'cursor-not-allowed', 'pointer-events-none');
+        }
+        var onClose = function () {
+          dialog.removeEventListener('close', onClose);
+          if (dialog.returnValue) {
+            btn.textContent = dialog.returnValue;
+            btn.setAttribute('value', dialog.returnValue);
+            var moves = getMoves();
+            moves.push({ key: btn.getAttribute('name'), value: dialog.returnValue });
+            saveMoves(moves);
+          }
+          dialog.returnValue = '';
+        };
+        dialog.addEventListener('close', onClose);
+        dialog.showModal();
+      });
+    }
 
     // Load
     replayMoves(getMoves());
