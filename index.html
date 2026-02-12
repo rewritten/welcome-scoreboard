@@ -124,6 +124,20 @@
       .estate-step:not(:has(input:checked)) ~ .estate-step {
         @apply pointer-events-none;
       }
+
+      .denial-step {
+        @apply w-8 h-8 text-xs font-semibold
+               border-2 border-red-300 rounded-full
+               bg-white cursor-pointer
+               flex items-center justify-center;
+      }
+      .denial-step:has(input:checked) {
+        @apply bg-red-500 text-white border-red-600;
+      }
+      .denial-step:has(input:checked),
+      .denial-step:not(:has(input:checked)) ~ .denial-step {
+        @apply pointer-events-none;
+      }
     }
   </style>
 </head>
@@ -545,6 +559,20 @@
             </div>
 
           </div>
+        </section>
+
+        <!-- Denials -->
+        <section class="flex flex-col items-center gap-2">
+          <h3 class="text-sm font-semibold text-red-700 text-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-slash-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+              <path d="M11.354 4.646a.5.5 0 0 0-.708 0L4.646 10.646a.5.5 0 0 0 .708.708l6-6a.5.5 0 0 0 0-.708"/>
+            </svg>
+          </h3>
+          <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
+          <label class="denial-step"><input type="checkbox" name="den-1" class="hidden">0</label>
+          <label class="denial-step"><input type="checkbox" name="den-2" class="hidden">3</label>
+          <label class="denial-step"><input type="checkbox" name="den-3" class="hidden">5</label>
         </section>
 
       </div><!-- /tab city-plans -->
