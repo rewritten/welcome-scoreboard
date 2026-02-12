@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome To… Scoresheet</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -18,66 +18,463 @@
     }
   </script>
   <style type="text/tailwindcss">
-    @layer base {
-      body {
-        @apply bg-amber-50 text-gray-800 min-h-screen;
-      }
-    }
-
     @layer components {
-      .score-input {
-        @apply w-16 text-center border border-gray-300 rounded p-1
-               bg-white focus:outline-none focus:ring-2 focus:ring-amber-400;
+      .house-input {
+        @apply w-10 h-10 text-center text-sm font-bold
+               border-2 border-gray-400 rounded bg-white
+               focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400;
       }
 
-      .score-checkbox {
-        @apply w-5 h-5 accent-amber-500 cursor-pointer;
+      .fence-slot {
+        @apply w-3 h-10 flex items-center justify-center cursor-pointer;
+      }
+      .fence-line {
+        @apply block w-0.5 h-8 bg-gray-200 rounded-full transition-all;
+      }
+      .fence-slot:has(input:checked) .fence-line {
+        @apply w-1 bg-amber-700;
+      }
+      .fence-slot:has(input:checked),
+      .pool-slot:has(input:checked),
+      .house-input:not([value]) + .pool-slot,
+      .beauty-step:has(input:checked),
+      .beauty-step:not(:has(input:checked)) ~ .beauty-step {
+        @apply pointer-events-none;
+      }
+
+      /* Hide fence between two houses with the same number */
+      div:has(> .house-input[value="1"]) + div:has(+ div > .house-input[value="1"]) .fence-slot,
+      div:has(> .house-input[value="2"]) + div:has(+ div > .house-input[value="2"]) .fence-slot,
+      div:has(> .house-input[value="3"]) + div:has(+ div > .house-input[value="3"]) .fence-slot,
+      div:has(> .house-input[value="4"]) + div:has(+ div > .house-input[value="4"]) .fence-slot,
+      div:has(> .house-input[value="5"]) + div:has(+ div > .house-input[value="5"]) .fence-slot,
+      div:has(> .house-input[value="6"]) + div:has(+ div > .house-input[value="6"]) .fence-slot,
+      div:has(> .house-input[value="7"]) + div:has(+ div > .house-input[value="7"]) .fence-slot,
+      div:has(> .house-input[value="8"]) + div:has(+ div > .house-input[value="8"]) .fence-slot,
+      div:has(> .house-input[value="9"]) + div:has(+ div > .house-input[value="9"]) .fence-slot,
+      div:has(> .house-input[value="10"]) + div:has(+ div > .house-input[value="10"]) .fence-slot,
+      div:has(> .house-input[value="11"]) + div:has(+ div > .house-input[value="11"]) .fence-slot,
+      div:has(> .house-input[value="12"]) + div:has(+ div > .house-input[value="12"]) .fence-slot,
+      div:has(> .house-input[value="13"]) + div:has(+ div > .house-input[value="13"]) .fence-slot,
+      div:has(> .house-input[value="14"]) + div:has(+ div > .house-input[value="14"]) .fence-slot,
+      div:has(> .house-input[value="15"]) + div:has(+ div > .house-input[value="15"]) .fence-slot {
+        @apply invisible pointer-events-none;
+      }
+
+      .pool-slot {
+        @apply block cursor-pointer;
+      }
+      .pool-shape {
+        @apply block w-10 h-5 mt-1 rounded-full
+               border-2 border-gray-400
+               bg-gray-200 transition-colors;
+      }
+      .pool-slot:has(input:checked) .pool-shape {
+        @apply bg-sky-300 border-sky-400;
+      }
+
+      .beauty-step {
+        @apply w-8 h-8 text-xs font-semibold
+               border-2 border-emerald-300 rounded-full
+               bg-white cursor-pointer
+               flex items-center justify-center;
+      }
+      .beauty-step:has(input:checked) {
+        @apply bg-emerald-500 text-white border-emerald-600;
+      }
+
+      .number-choice-btn {
+        @apply focus:outline-none grid place-items-center;
       }
     }
   </style>
 </head>
-<body>
-  <div class="max-w-2xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-center mb-8">Welcome To… Scoresheet</h1>
+<body class="bg-teal-50 text-stone-800 min-h-screen">
+  <button id="new-game-btn" type="button" class="text-sm font-bold text-red-700 fixed top-4 left-4">
+    New Game
+  </button>
+  <button id="undo-btn" type="button" class="text-sm font-medium text-amber-700 fixed top-4 right-4">
+    Undo
+  </button>
+  <div class="max-w-vw mx-auto px-4 py-8">
+    <form id="scoresheet" autocomplete="off">
 
-    <form id="scoresheet" autocomplete="off"
-          _="on input or change
-               set data to {}
-               for elt in <[data-key] /> in me
-                 if elt.type is 'checkbox'
-                   set data[elt's @data-key] to elt.checked
-                 else
-                   set data[elt's @data-key] to elt.value
-                 end
-               end
-               js(data) localStorage.setItem('scoresheet', JSON.stringify(data)) end">
+      <!-- ==================== Street 1 — 10 houses ==================== -->
+      <section class="mb-8">
+        <div class="flex items-start justify-center">
 
-      <!-- Placeholder sections — we'll flesh these out next -->
-      <section class="mb-6">
-        <h2 class="text-xl font-semibold mb-3">Scores</h2>
-        <p class="text-gray-500 italic">Sections coming soon…</p>
+          <!-- House 1 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h1" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f1" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 2 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h2" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f2" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 3 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h3" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r1-p3" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f3" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 4 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h4" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f4" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 5 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h5" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f5" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 6 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h6" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f6" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 7 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h7" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r1-p7" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f7" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 8 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h8" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r1-p8" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f8" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 9 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h9" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r1-f9" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 10 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r1-h10" class="house-input"></button>
+          </div>
+
+        </div>
+        <!-- Beauty / Parks gauge -->
+        <div class="beauty-gauge flex items-center gap-2 mt-3 justify-center">
+          <span class="text-sm font-medium text-emerald-700">Parks</span>
+          <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
+          <label class="beauty-step"><input type="checkbox" name="r1-b1" class="hidden">2</label>
+          <label class="beauty-step"><input type="checkbox" name="r1-b2" class="hidden">4</label>
+          <label class="beauty-step"><input type="checkbox" name="r1-b3" class="hidden">10</label>
+        </div>
+      </section>
+
+      <!-- ==================== Street 2 — 11 houses ==================== -->
+      <section class="mb-8">
+        <div class="flex items-start justify-center">
+
+          <!-- House 1 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h1" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r2-p1" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f1" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 2 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h2" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f2" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 3 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h3" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f3" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 4 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h4" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r2-p4" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f4" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 5 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h5" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f5" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 6 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h6" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f6" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 7 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h7" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f7" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 8 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h8" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r2-p8" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f8" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 9 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h9" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f9" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 10 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h10" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r2-f10" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 11 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r2-h11" class="house-input"></button>
+          </div>
+
+        </div>
+        <!-- Beauty / Parks gauge -->
+        <div class="beauty-gauge flex items-center gap-2 mt-3 justify-center">
+          <span class="text-sm font-medium text-emerald-700">Parks</span>
+          <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
+          <label class="beauty-step"><input type="checkbox" name="r2-b1" class="hidden">2</label>
+          <label class="beauty-step"><input type="checkbox" name="r2-b2" class="hidden">4</label>
+          <label class="beauty-step"><input type="checkbox" name="r2-b3" class="hidden">6</label>
+          <label class="beauty-step"><input type="checkbox" name="r2-b4" class="hidden">14</label>
+        </div>
+      </section>
+
+      <!-- ==================== Street 3 — 12 houses ==================== -->
+      <section class="mb-8">
+        <div class="flex items-start justify-center">
+
+          <!-- House 1 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h1" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f1" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 2 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h2" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r3-p2" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f2" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 3 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h3" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f3" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 4 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h4" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f4" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 5 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h5" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f5" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 6 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h6" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f6" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 7 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h7" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r3-p7" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f7" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 8 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h8" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f8" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 9 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h9" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f9" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 10 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h10" class="house-input"></button>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f10" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 11 (pool) -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h11" class="house-input"></button>
+            <label class="pool-slot"><input type="checkbox" name="r3-p11" class="hidden"><span class="pool-shape"></span></label>
+          </div>
+          <div class="h-10 flex items-center"><label class="fence-slot"><input type="checkbox" name="r3-f11" class="hidden"><span class="fence-line"></span></label></div>
+
+          <!-- House 12 -->
+          <div class="flex flex-col items-center">
+            <button type="button" name="r3-h12" class="house-input"></button>
+          </div>
+
+        </div>
+        <!-- Beauty / Parks gauge -->
+        <div class="beauty-gauge flex items-center gap-2 mt-3 justify-center">
+          <span class="text-sm font-medium text-emerald-700">Parks</span>
+          <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
+          <label class="beauty-step"><input type="checkbox" name="r3-b1" class="hidden">2</label>
+          <label class="beauty-step"><input type="checkbox" name="r3-b2" class="hidden">4</label>
+          <label class="beauty-step"><input type="checkbox" name="r3-b3" class="hidden">6</label>
+          <label class="beauty-step"><input type="checkbox" name="r3-b4" class="hidden">8</label>
+          <label class="beauty-step"><input type="checkbox" name="r3-b5" class="hidden">18</label>
+        </div>
       </section>
 
     </form>
   </div>
 
-  <!-- Restore state from localStorage on load -->
-  <script type="text/hyperscript">
-    on load
-      js
-        var raw = localStorage.getItem('scoresheet')
-        return raw ? JSON.parse(raw) : {}
-      end
-      set data to the result
-      for elt in <[data-key] /> in #scoresheet
-        set key to elt's @data-key
-        js(data, key, elt)
-          if (key in data) {
-            if (elt.type === 'checkbox') elt.checked = data[key]
-            else elt.value = data[key]
+  <dialog id="number-choice" class="w-screen h-screen max-w-none max-h-none m-0 p-0" closedby="none">
+    <form class="grid grid-cols-5 w-full h-full gap-2 p-3" method="dialog">
+      <button class="number-choice-btn border rounded" value="1">1</button>
+      <button class="number-choice-btn border rounded" value="2">2</button>
+      <button class="number-choice-btn border rounded" value="3">3</button>
+      <button class="number-choice-btn border rounded" value="4">4</button>
+      <button class="number-choice-btn border rounded" value="5">5</button>
+      <button class="number-choice-btn border rounded" value="6">6</button>
+      <button class="number-choice-btn border rounded" value="7">7</button>
+      <button class="number-choice-btn border rounded" value="8">8</button>
+      <button class="number-choice-btn border rounded" value="9">9</button>
+      <button class="number-choice-btn border rounded" value="10">10</button>
+      <button class="number-choice-btn border rounded" value="11">11</button>
+      <button class="number-choice-btn border rounded" value="12">12</button>
+      <button class="number-choice-btn border rounded" value="13">13</button>
+      <button class="number-choice-btn border rounded" value="14">14</button>
+      <button class="number-choice-btn border rounded" value="15">15</button>
+    </form>
+  </dialog>
+
+  <script>
+    function getMoves() {
+      try {
+        var parsed = JSON.parse(localStorage.getItem('scoresheet'));
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) { return []; }
+    }
+
+    function saveMoves(moves) {
+      localStorage.setItem('scoresheet', JSON.stringify(moves));
+    }
+
+    function replayMoves(moves) {
+      document.querySelectorAll('#scoresheet [name]').forEach(function (elt) {
+        if (elt.type === 'checkbox') elt.checked = false;
+        else { elt.textContent = ''; elt.removeAttribute('value'); }
+      });
+      moves.forEach(function (move) {
+        var elt = document.querySelector('[name="' + move.key + '"]');
+        if (!elt) return;
+        if (elt.type === 'checkbox') elt.checked = true;
+        else { elt.textContent = move.bis ? 'bis' : move.value; elt.setAttribute('value', move.value); }
+      });
+    }
+
+    // Form: record checkbox moves
+    document.getElementById('scoresheet').addEventListener('change', function (e) {
+      var t = e.target;
+      var key = t.getAttribute('name');
+      if (!key || t.type !== 'checkbox') return;
+      var moves = getMoves();
+      moves.push({ key: key, value: true });
+      saveMoves(moves);
+    });
+
+    // Undo
+    document.getElementById('undo-btn').addEventListener('click', function () {
+      var moves = getMoves();
+      if (!moves.length) return;
+      moves.pop();
+      saveMoves(moves);
+      replayMoves(moves);
+    });
+
+    // New Game
+    document.getElementById('new-game-btn').addEventListener('click', function () {
+      if (!confirm('Start a new game? This will clear all progress.')) return;
+      localStorage.removeItem('scoresheet');
+      location.reload();
+    });
+
+    for (let btn of document.querySelectorAll('button.house-input')) {
+      btn.addEventListener('click', function () {
+        if (btn.textContent) return; // Don't open dialog if already has a value
+        var dialog = document.getElementById('number-choice');
+
+        dialog.returnValue = '';
+        let otherBtns = btn.closest('section').querySelectorAll('button.house-input');
+        let indexOfMe = Array.from(otherBtns).indexOf(btn);
+        let previousValues = Array.from(otherBtns).slice(0, indexOfMe).map(b => b.value).filter(Boolean).map(Number);
+        let nextValues = Array.from(otherBtns).slice(indexOfMe + 1).map(b => b.value).filter(Boolean).map(Number);
+        let minValue = Math.max(0, ...previousValues), maxValue = Math.min(16, ...nextValues);
+        let rowPrefix = btn.getAttribute('name').split('-')[0];
+        let leftFenceChecked = indexOfMe > 0 && document.querySelector('[name="' + rowPrefix + '-f' + indexOfMe + '"]')?.checked;
+        let rightFenceChecked = indexOfMe < otherBtns.length - 1 && document.querySelector('[name="' + rowPrefix + '-f' + (indexOfMe + 1) + '"]')?.checked;
+        let prevBis = indexOfMe > 0 && otherBtns[indexOfMe - 1].value && !leftFenceChecked ? Number(otherBtns[indexOfMe - 1].value) : null;
+        let nextBis = indexOfMe < otherBtns.length - 1 && otherBtns[indexOfMe + 1].value && !rightFenceChecked ? Number(otherBtns[indexOfMe + 1].value) : null;
+
+        for (let numberBtn of dialog.querySelectorAll('.number-choice-btn')) {
+          let n = Number(numberBtn.value);
+          numberBtn.textContent = numberBtn.value;
+          let isBis = (prevBis !== null && n === prevBis) || (nextBis !== null && n === nextBis);
+          if (isBis) {
+            numberBtn.textContent = numberBtn.value + ' bis';
+            numberBtn.classList.remove('opacity-10', 'cursor-not-allowed', 'pointer-events-none');
+          } else if (n <= minValue || n >= maxValue) {
+            numberBtn.classList.add('opacity-10', 'cursor-not-allowed', 'pointer-events-none');
+          } else {
+            numberBtn.classList.remove('opacity-10', 'cursor-not-allowed', 'pointer-events-none');
           }
-        end
-      end
+        }
+
+        var onClose = function () {
+          dialog.removeEventListener('close', onClose);
+          if (dialog.returnValue) {
+            let n = Number(dialog.returnValue);
+            let isBis = (prevBis !== null && n === prevBis) || (nextBis !== null && n === nextBis);
+            btn.textContent = isBis ? 'bis' : dialog.returnValue;
+            btn.setAttribute('value', dialog.returnValue);
+            var moves = getMoves();
+            moves.push({ key: btn.getAttribute('name'), value: dialog.returnValue, bis: isBis });
+            saveMoves(moves);
+          }
+          dialog.returnValue = '';
+        };
+        dialog.addEventListener('close', onClose);
+        dialog.showModal();
+    } )}
+
+    // Load
+    replayMoves(getMoves());
   </script>
 </body>
 </html>
