@@ -35,8 +35,6 @@
         @apply w-1 bg-amber-700;
       }
       .fence-slot:has(input:checked),
-      .pool-slot:has(input:checked),
-      .house-input:not([value]) + .pool-slot,
       .beauty-step:has(input:checked),
       .beauty-step:not(:has(input:checked)) ~ .beauty-step {
         @apply pointer-events-none;
@@ -62,7 +60,7 @@
       }
 
       .pool-slot {
-        @apply block cursor-pointer;
+        @apply block pointer-events-none;
       }
       .pool-shape {
         @apply block w-10 h-5 mt-1 rounded-full
@@ -354,23 +352,31 @@
     </form>
   </div>
 
-  <dialog id="number-choice" class="w-screen h-screen max-w-none max-h-none m-0 p-0" closedby="none">
-    <form class="grid grid-cols-5 w-full h-full gap-2 p-3" method="dialog">
-      <button class="number-choice-btn border rounded" value="1">1</button>
-      <button class="number-choice-btn border rounded" value="2">2</button>
-      <button class="number-choice-btn border rounded" value="3">3</button>
-      <button class="number-choice-btn border rounded" value="4">4</button>
-      <button class="number-choice-btn border rounded" value="5">5</button>
-      <button class="number-choice-btn border rounded" value="6">6</button>
-      <button class="number-choice-btn border rounded" value="7">7</button>
-      <button class="number-choice-btn border rounded" value="8">8</button>
-      <button class="number-choice-btn border rounded" value="9">9</button>
-      <button class="number-choice-btn border rounded" value="10">10</button>
-      <button class="number-choice-btn border rounded" value="11">11</button>
-      <button class="number-choice-btn border rounded" value="12">12</button>
-      <button class="number-choice-btn border rounded" value="13">13</button>
-      <button class="number-choice-btn border rounded" value="14">14</button>
-      <button class="number-choice-btn border rounded" value="15">15</button>
+  <dialog id="number-choice" closedby="none" class="rounded-lg">
+    <form class="grid grid-cols-8 gap-2 p-3" method="dialog">
+      <button class="border rounded-full size-12">X</button>
+      <button class="number-choice-btn border rounded-full size-12" value="1">1</button>
+      <button class="number-choice-btn border rounded-full size-12" value="2">2</button>
+      <button class="number-choice-btn border rounded-full size-12" value="3">3</button>
+      <button class="number-choice-btn border rounded-full size-12" value="4">4</button>
+      <button class="number-choice-btn border rounded-full size-12" value="5">5</button>
+      <button class="number-choice-btn border rounded-full size-12" value="6">6</button>
+      <button class="number-choice-btn border rounded-full size-12" value="7">7</button>
+      <button class="number-choice-btn border rounded-full size-12" value="8">8</button>
+      <button class="number-choice-btn border rounded-full size-12" value="9">9</button>
+      <button class="number-choice-btn border rounded-full size-12" value="10">10</button>
+      <button class="number-choice-btn border rounded-full size-12" value="11">11</button>
+      <button class="number-choice-btn border rounded-full size-12" value="12">12</button>
+      <button class="number-choice-btn border rounded-full size-12" value="13">13</button>
+      <button class="number-choice-btn border rounded-full size-12" value="14">14</button>
+      <button class="number-choice-btn border rounded-full size-12" value="15">15</button>
+    </form>
+  </dialog>
+
+  <dialog id="pool-choice" closedby="none" class="rounded-lg">
+    <form class="grid grid-cols-2 gap-6 p-6 rounded-lg" method="dialog">
+      <button class="grid place-items-center border-2 size-24 border-sky-400 bg-sky-300 rounded-full text-lg" value="yes"></button>
+      <button class="grid place-items-center border-2 size-24 border-gray-400 bg-gray-200 rounded-full text-lg" value="no"></button>
     </form>
   </dialog>
 
@@ -466,6 +472,24 @@
             var moves = getMoves();
             moves.push({ key: btn.getAttribute('name'), value: dialog.returnValue, bis: isBis });
             saveMoves(moves);
+
+            // If this house has a pool, ask about it
+            let poolInput = btn.parentElement.querySelector('.pool-slot input');
+            if (poolInput && !poolInput.checked) {
+              let poolDialog = document.getElementById('pool-choice');
+              poolDialog.returnValue = '';
+              var onPoolClose = function () {
+                poolDialog.removeEventListener('close', onPoolClose);
+                if (poolDialog.returnValue === 'yes') {
+                  poolInput.checked = true;
+                  var moves = getMoves();
+                  moves.push({ key: poolInput.getAttribute('name'), value: true });
+                  saveMoves(moves);
+                }
+              };
+              poolDialog.addEventListener('close', onPoolClose);
+              poolDialog.showModal();
+            }
           }
           dialog.returnValue = '';
         };
