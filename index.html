@@ -59,11 +59,14 @@
         @apply invisible pointer-events-none;
       }
 
+      div:has(> .pool-slot) {
+        @apply relative;
+      }
       .pool-slot {
-        @apply block pointer-events-none;
+        @apply absolute -bottom-1 -right-1 block pointer-events-none z-10;
       }
       .pool-shape {
-        @apply block w-10 h-5 mt-1 rounded-full
+        @apply block w-4 h-4 rounded-full
                border-2 border-gray-400
                bg-gray-200 transition-colors;
       }
@@ -166,7 +169,11 @@
         </div>
         <!-- Beauty / Parks gauge -->
         <div class="beauty-gauge flex items-center gap-2 mt-3 justify-center">
-          <span class="text-sm font-medium text-emerald-700">Parks</span>
+          <span class="text-sm font-medium text-emerald-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tree-fill" viewBox="0 0 16 16">
+              <path d="M8.416.223a.5.5 0 0 0-.832 0l-3 4.5A.5.5 0 0 0 5 5.5h.098L3.076 8.735A.5.5 0 0 0 3.5 9.5h.191l-1.638 3.276a.5.5 0 0 0 .447.724H7V16h2v-2.5h4.5a.5.5 0 0 0 .447-.724L12.31 9.5h.191a.5.5 0 0 0 .424-.765L10.902 5.5H11a.5.5 0 0 0 .416-.777z"/>
+            </svg>
+          </span>
           <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
           <label class="beauty-step"><input type="checkbox" name="r1-b1" class="hidden">2</label>
           <label class="beauty-step"><input type="checkbox" name="r1-b2" class="hidden">4</label>
@@ -249,7 +256,11 @@
         </div>
         <!-- Beauty / Parks gauge -->
         <div class="beauty-gauge flex items-center gap-2 mt-3 justify-center">
-          <span class="text-sm font-medium text-emerald-700">Parks</span>
+          <span class="text-sm font-medium text-emerald-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tree-fill" viewBox="0 0 16 16">
+              <path d="M8.416.223a.5.5 0 0 0-.832 0l-3 4.5A.5.5 0 0 0 5 5.5h.098L3.076 8.735A.5.5 0 0 0 3.5 9.5h.191l-1.638 3.276a.5.5 0 0 0 .447.724H7V16h2v-2.5h4.5a.5.5 0 0 0 .447-.724L12.31 9.5h.191a.5.5 0 0 0 .424-.765L10.902 5.5H11a.5.5 0 0 0 .416-.777z"/>
+            </svg>
+          </span>
           <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
           <label class="beauty-step"><input type="checkbox" name="r2-b1" class="hidden">2</label>
           <label class="beauty-step"><input type="checkbox" name="r2-b2" class="hidden">4</label>
@@ -339,7 +350,11 @@
         </div>
         <!-- Beauty / Parks gauge -->
         <div class="beauty-gauge flex items-center gap-2 mt-3 justify-center">
-          <span class="text-sm font-medium text-emerald-700">Parks</span>
+          <span class="text-sm font-medium text-emerald-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tree-fill" viewBox="0 0 16 16">
+              <path d="M8.416.223a.5.5 0 0 0-.832 0l-3 4.5A.5.5 0 0 0 5 5.5h.098L3.076 8.735A.5.5 0 0 0 3.5 9.5h.191l-1.638 3.276a.5.5 0 0 0 .447.724H7V16h2v-2.5h4.5a.5.5 0 0 0 .447-.724L12.31 9.5h.191a.5.5 0 0 0 .424-.765L10.902 5.5H11a.5.5 0 0 0 .416-.777z"/>
+            </svg>
+          </span>
           <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
           <label class="beauty-step"><input type="checkbox" name="r3-b1" class="hidden">2</label>
           <label class="beauty-step"><input type="checkbox" name="r3-b2" class="hidden">4</label>
@@ -354,22 +369,22 @@
 
   <dialog id="number-choice" closedby="none" class="rounded-lg">
     <form class="grid grid-cols-8 gap-2 p-3" method="dialog">
-      <button class="border rounded-full size-12">X</button>
-      <button class="number-choice-btn border rounded-full size-12" value="1">1</button>
-      <button class="number-choice-btn border rounded-full size-12" value="2">2</button>
-      <button class="number-choice-btn border rounded-full size-12" value="3">3</button>
-      <button class="number-choice-btn border rounded-full size-12" value="4">4</button>
-      <button class="number-choice-btn border rounded-full size-12" value="5">5</button>
-      <button class="number-choice-btn border rounded-full size-12" value="6">6</button>
-      <button class="number-choice-btn border rounded-full size-12" value="7">7</button>
-      <button class="number-choice-btn border rounded-full size-12" value="8">8</button>
-      <button class="number-choice-btn border rounded-full size-12" value="9">9</button>
-      <button class="number-choice-btn border rounded-full size-12" value="10">10</button>
-      <button class="number-choice-btn border rounded-full size-12" value="11">11</button>
-      <button class="number-choice-btn border rounded-full size-12" value="12">12</button>
-      <button class="number-choice-btn border rounded-full size-12" value="13">13</button>
-      <button class="number-choice-btn border rounded-full size-12" value="14">14</button>
-      <button class="number-choice-btn border rounded-full size-12" value="15">15</button>
+      <button class="border rounded-full size-20">X</button>
+      <button class="number-choice-btn border rounded-full size-20" value="1">1</button>
+      <button class="number-choice-btn border rounded-full size-20" value="2">2</button>
+      <button class="number-choice-btn border rounded-full size-20" value="3">3</button>
+      <button class="number-choice-btn border rounded-full size-20" value="4">4</button>
+      <button class="number-choice-btn border rounded-full size-20" value="5">5</button>
+      <button class="number-choice-btn border rounded-full size-20" value="6">6</button>
+      <button class="number-choice-btn border rounded-full size-20" value="7">7</button>
+      <button class="number-choice-btn border rounded-full size-20" value="8">8</button>
+      <button class="number-choice-btn border rounded-full size-20" value="9">9</button>
+      <button class="number-choice-btn border rounded-full size-20" value="10">10</button>
+      <button class="number-choice-btn border rounded-full size-20" value="11">11</button>
+      <button class="number-choice-btn border rounded-full size-20" value="12">12</button>
+      <button class="number-choice-btn border rounded-full size-20" value="13">13</button>
+      <button class="number-choice-btn border rounded-full size-20" value="14">14</button>
+      <button class="number-choice-btn border rounded-full size-20" value="15">15</button>
     </form>
   </dialog>
 
