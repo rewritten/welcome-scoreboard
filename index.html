@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome To… Scoresheet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      body {
+        @apply bg-amber-50 text-gray-800 min-h-screen;
+      }
+    }
+
+    @layer components {
+      .score-input {
+        @apply w-16 text-center border border-gray-300 rounded p-1
+               bg-white focus:outline-none focus:ring-2 focus:ring-amber-400;
+      }
+
+      .score-checkbox {
+        @apply w-5 h-5 accent-amber-500 cursor-pointer;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-2xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Welcome To… Scoresheet</h1>
+
+    <form id="scoresheet" autocomplete="off"
+          _="on input or change
+               set data to {}
+               for elt in <[data-key] /> in me
+                 if elt.type is 'checkbox'
+                   set data[elt's @data-key] to elt.checked
+                 else
+                   set data[elt's @data-key] to elt.value
+                 end
+               end
+               js(data) localStorage.setItem('scoresheet', JSON.stringify(data)) end">
+
+      <!-- Placeholder sections — we'll flesh these out next -->
+      <section class="mb-6">
+        <h2 class="text-xl font-semibold mb-3">Scores</h2>
+        <p class="text-gray-500 italic">Sections coming soon…</p>
+      </section>
+
+    </form>
+  </div>
+
+  <!-- Restore state from localStorage on load -->
+  <script type="text/hyperscript">
+    on load
+      js
+        var raw = localStorage.getItem('scoresheet')
+        return raw ? JSON.parse(raw) : {}
+      end
+      set data to the result
+      for elt in <[data-key] /> in #scoresheet
+        set key to elt's @data-key
+        js(data, key, elt)
+          if (key in data) {
+            if (elt.type === 'checkbox') elt.checked = data[key]
+            else elt.value = data[key]
+          }
+        end
+      end
+  </script>
+</body>
+</html>
