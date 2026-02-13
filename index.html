@@ -87,7 +87,8 @@
       }
 
       #scoresheet:has(#tab-streets:checked) label[for="tab-streets"],
-      #scoresheet:has(#tab-city-plans:checked) label[for="tab-city-plans"] {
+      #scoresheet:has(#tab-city-plans:checked) label[for="tab-city-plans"],
+      #scoresheet:has(#tab-score:checked) label[for="tab-score"] {
         @apply text-teal-700 border-teal-600;
       }
 
@@ -163,7 +164,7 @@
 
   
   <div class="max-w-vw mx-auto px-4 py-4 h-dvh overflow-hidden">
-    <form id="scoresheet" autocomplete="off">
+    <form id="scoresheet" autocomplete="off" class="h-full">
       
       <label for="tab-streets" class="fixed left-4 top-20 px-4 py-2 text-sm font-semibold rounded-lg border-2 border-transparent text-gray-500 cursor-pointer transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-houses" viewBox="0 0 16 16">
@@ -177,9 +178,17 @@
         </svg>
       </label>
 
+      <label for="tab-score" class="fixed left-4 top-60 px-4 py-2 text-sm font-semibold rounded-lg border-2 border-transparent text-gray-500 cursor-pointer transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+      </label>
+
       <!-- Tab radios -->
       <input type="radio" name="tab" id="tab-streets" class="hidden peer/streets" >
-      <input type="radio" name="tab" id="tab-city-plans" class="hidden peer/city-plans" checked>
+      <input type="radio" name="tab" id="tab-city-plans" class="hidden peer/city-plans">
+      <input type="radio" name="tab" id="tab-score" class="hidden peer/score" checked>
 
       <!-- Tab bar -->
 
@@ -484,7 +493,7 @@
       </div><!-- /tab streets -->
 
       <!-- ==================== TAB 2: City Plans ==================== -->
-      <div class="hidden peer-checked/city-plans:flex pl-36 gap-10">
+      <div class="hidden peer-checked/city-plans:flex gap-12 justify-center">
 
         <!-- Game Objectives -->
         <section class="flex flex-col items-center gap-2">
@@ -608,6 +617,88 @@
 
       </div><!-- /tab city-plans -->
 
+      <!-- ==================== TAB 3: Score Summary ==================== -->
+      <div class="hidden peer-checked/score:grid place-items-center h-full">
+      <div class="inline-grid grid-cols-3 grid-flow-dense items-center gap-10">
+        <!-- Left column: objectives, parks, pools, bis, denials -->
+        <table class="text-sm">
+          <tr>
+            <td class="pr-4 py-0.5 text-gray-600">Plan n°1</td>
+            <td class="text-right font-bold tabular-nums w-10" id="score-obj1">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-gray-600">Plan n°2</td>
+            <td class="text-right font-bold tabular-nums w-10" id="score-obj2">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-gray-600">Plan n°3</td>
+            <td class="text-right font-bold tabular-nums w-10" id="score-obj3">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-emerald-700">Parks</td>
+            <td class="text-right font-bold tabular-nums w-10 text-emerald-700" id="score-parks">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-sky-600">Pools (<span id="score-pool-count">0</span>)</td>
+            <td class="text-right font-bold tabular-nums w-10 text-sky-600" id="score-pools">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-red-600">Bis (<span id="score-bis-count">0</span>)</td>
+            <td class="text-right font-bold tabular-nums w-10 text-red-600" id="score-bis">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-red-600">Prohibitions</td>
+            <td class="text-right font-bold tabular-nums w-10 text-red-600" id="score-denials">0</td>
+          </tr>
+        </table>
+
+        <!-- Middle column: zones -->
+        <table class="text-sm">
+          <tr>
+            <td class="pr-4 py-0.5 text-violet-600">Size 1 (<span id="score-zone1-count">0</span>)</td>
+            <td class="text-right font-bold tabular-nums w-10 text-violet-600" id="score-zone1">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-violet-600">Size 2 (<span id="score-zone2-count">0</span>)</td>
+            <td class="text-right font-bold tabular-nums w-10 text-violet-600" id="score-zone2">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-violet-600">Size 3 (<span id="score-zone3-count">0</span>)</td>
+            <td class="text-right font-bold tabular-nums w-10 text-violet-600" id="score-zone3">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-violet-600">Size 4 (<span id="score-zone4-count">0</span>)</td>
+            <td class="text-right font-bold tabular-nums w-10 text-violet-600" id="score-zone4">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-violet-600">Size 5 (<span id="score-zone5-count">0</span>)</td>
+            <td class="text-right font-bold tabular-nums w-10 text-violet-600" id="score-zone5">0</td>
+          </tr>
+          <tr>
+            <td class="pr-4 py-0.5 text-violet-600">Size 6 (<span id="score-zone6-count">0</span>)</td>
+            <td class="text-right font-bold tabular-nums w-10 text-violet-600" id="score-zone6">0</td>
+          </tr>
+        </table>
+
+        <!-- Bottom row: contractors -->
+        <div class="flex items-center gap-3 text-sm text-amber-700 row-2 col-span-2">
+          <span class="font-medium">Contractors (<span id="score-ctr-count">0</span>)</span>
+          <div class="flex gap-2">
+            <label class="inline-block cursor-pointer"><input type="radio" name="ctr-score" value="7" class="hidden peer"><span class="inline-flex items-center justify-center w-10 h-10 text-sm font-bold rounded-lg border-2 border-gray-300 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-600">7</span></label>
+            <label class="inline-block cursor-pointer"><input type="radio" name="ctr-score" value="4" class="hidden peer"><span class="inline-flex items-center justify-center w-10 h-10 text-sm font-bold rounded-lg border-2 border-gray-300 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-600">4</span></label>
+            <label class="inline-block cursor-pointer"><input type="radio" name="ctr-score" value="1" class="hidden peer"><span class="inline-flex items-center justify-center w-10 h-10 text-sm font-bold rounded-lg border-2 border-gray-300 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-600">1</span></label>
+            <label class="inline-block cursor-pointer"><input type="radio" name="ctr-score" value="0" class="hidden peer"><span class="inline-flex items-center justify-center w-10 h-10 text-sm font-bold rounded-lg border-2 border-gray-300 peer-checked:bg-gray-500 peer-checked:text-white peer-checked:border-gray-600">0</span></label>
+          </div>
+        </div>
+
+        <!-- Total -->
+        <div class="flex flex-col items-center col-3 row-1 row-span-2">
+          <span class="text-xs text-gray-500 uppercase tracking-wide">Total</span>
+          <span class="text-4xl font-bold tabular-nums" id="score-total">0</span>
+        </div>
+      </div>
+      </div><!-- /tab score -->
+
     </form>
   </div>
 
@@ -651,11 +742,13 @@
 
     function saveMoves(moves) {
       localStorage.setItem('scoresheet', JSON.stringify(moves));
+      updateGauges();
     }
 
     function replayMoves(moves) {
       document.querySelectorAll('#scoresheet [name]').forEach(function (elt) {
         if (elt.type === 'checkbox') elt.checked = false;
+        else if (elt.type === 'radio') elt.checked = false;
         else { elt.textContent = ''; elt.removeAttribute('value'); }
       });
       moves.forEach(function (move) {
@@ -664,6 +757,128 @@
         if (elt.type === 'checkbox') elt.checked = true;
         else { elt.textContent = move.bis ? 'bis' : move.value; elt.setAttribute('value', move.value); }
       });
+      updateGauges();
+    }
+
+    function updateGauges() {
+      var poolCount = Math.min(document.querySelectorAll('.pool-slot input:checked').length, 9);
+      var bisCount = 0;
+      document.querySelectorAll('button.house-input').forEach(function(b) {
+        if (b.textContent === 'bis') bisCount++;
+      });
+      bisCount = Math.min(bisCount, 9);
+      document.querySelectorAll('#pool-gauge .gauge-val').forEach(function(el, i) {
+        el.classList.remove('text-sky-600', 'text-sky-300', 'text-gray-300');
+        if (i === poolCount) el.classList.add('text-sky-600');
+        else if (i < poolCount) el.classList.add('text-sky-300');
+        else el.classList.add('text-gray-300');
+      });
+      document.querySelectorAll('#bis-gauge .gauge-val').forEach(function(el, i) {
+        el.classList.remove('text-red-500', 'text-red-300', 'text-gray-300');
+        if (i === bisCount) el.classList.add('text-red-500');
+        else if (i < bisCount) el.classList.add('text-red-300');
+        else el.classList.add('text-gray-300');
+      });
+      updateScoreSummary();
+    }
+
+    function updateScoreSummary() {
+      // Objectives
+      var obj1 = parseInt(document.querySelector('[name="obj-1"]').getAttribute('value')) || 0;
+      var obj2 = parseInt(document.querySelector('[name="obj-2"]').getAttribute('value')) || 0;
+      var obj3 = parseInt(document.querySelector('[name="obj-3"]').getAttribute('value')) || 0;
+
+      // Parks — last checked beauty step per row
+      function getParksScore(rowPrefix) {
+        var score = 0;
+        document.querySelectorAll('[name^="' + rowPrefix + '-b"]').forEach(function(cb) {
+          if (cb.checked) score = parseInt(cb.parentElement.textContent);
+        });
+        return score;
+      }
+      var parksTotal = getParksScore('r1') + getParksScore('r2') + getParksScore('r3');
+
+      // Pools
+      var poolValues = [0, 3, 6, 9, 13, 17, 21, 26, 31, 36];
+      var poolCount = Math.min(document.querySelectorAll('.pool-slot input:checked').length, 9);
+      var poolScore = poolValues[poolCount];
+
+      // Bis
+      var bisValues = [0, 1, 3, 6, 9, 12, 16, 20, 24, 28];
+      var bisCount = 0;
+      document.querySelectorAll('button.house-input').forEach(function(b) {
+        if (b.textContent === 'bis') bisCount++;
+      });
+      bisCount = Math.min(bisCount, 9);
+      var bisScore = bisValues[bisCount];
+
+      // Denials — last checked denial step
+      var denialScore = 0;
+      document.querySelectorAll('[name^="den-"]').forEach(function(cb) {
+        if (cb.checked) denialScore = parseInt(cb.parentElement.textContent);
+      });
+
+      // Contractors — count checked, score from radio
+      var ctrCount = 0;
+      document.querySelectorAll('[name^="ctr-"]:not([name="ctr-score"])').forEach(function(cb) {
+        if (cb.checked) ctrCount++;
+      });
+      var ctrScoreRadio = document.querySelector('[name="ctr-score"]:checked');
+      var ctrScore = ctrScoreRadio ? parseInt(ctrScoreRadio.value) : 0;
+
+      // Zones — count completed estates per size across all streets
+      var zoneCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
+      var streets = [{prefix: 'r1', houses: 10}, {prefix: 'r2', houses: 11}, {prefix: 'r3', houses: 12}];
+      streets.forEach(function(street) {
+        // Collect fence positions (fence i sits between house i and house i+1)
+        var fences = [];
+        for (var i = 1; i < street.houses; i++) {
+          var f = document.querySelector('[name="' + street.prefix + '-f' + i + '"]');
+          if (f && f.checked) fences.push(i);
+        }
+        // Boundaries: start-of-street, each fence, end-of-street
+        var bounds = [0].concat(fences).concat([street.houses]);
+        for (var j = 0; j < bounds.length - 1; j++) {
+          var size = bounds[j + 1] - bounds[j];
+          if (size < 1 || size > 6) continue;
+          // Check every house in this segment is built
+          var allBuilt = true;
+          for (var k = bounds[j] + 1; k <= bounds[j + 1]; k++) {
+            var h = document.querySelector('[name="' + street.prefix + '-h' + k + '"]');
+            if (!h || !h.getAttribute('value')) { allBuilt = false; break; }
+          }
+          if (allBuilt) zoneCounts[size]++;
+        }
+      });
+
+      // Estate value per size: base value unless upgraded
+      var baseValues = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6};
+      var zoneTotal = 0;
+      for (var s = 1; s <= 6; s++) {
+        var estValue = baseValues[s];
+        document.querySelectorAll('[name^="est' + s + '-"]').forEach(function(cb) {
+          if (cb.checked) estValue = parseInt(cb.parentElement.textContent);
+        });
+        var zoneScore = zoneCounts[s] * estValue;
+        zoneTotal += zoneScore;
+        document.getElementById('score-zone' + s).textContent = zoneScore;
+        document.getElementById('score-zone' + s + '-count').textContent = zoneCounts[s];
+      }
+
+      // Update DOM
+      document.getElementById('score-obj1').textContent = obj1;
+      document.getElementById('score-obj2').textContent = obj2;
+      document.getElementById('score-obj3').textContent = obj3;
+      document.getElementById('score-parks').textContent = parksTotal;
+      document.getElementById('score-pool-count').textContent = poolCount;
+      document.getElementById('score-pools').textContent = poolScore;
+      document.getElementById('score-bis-count').textContent = bisCount;
+      document.getElementById('score-bis').textContent = bisScore ? '-' + bisScore : '0';
+      document.getElementById('score-denials').textContent = denialScore ? '-' + denialScore : '0';
+      document.getElementById('score-ctr-count').textContent = ctrCount;
+
+      var total = obj1 + obj2 + obj3 + parksTotal + poolScore + ctrScore + zoneTotal - bisScore - denialScore;
+      document.getElementById('score-total').textContent = total;
     }
 
     // Form: record checkbox moves
@@ -685,10 +900,19 @@
       replayMoves(moves);
     });
 
+    // Contractor score radio
+    document.querySelectorAll('[name="ctr-score"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        localStorage.setItem('ctr-score', radio.value);
+        updateScoreSummary();
+      });
+    });
+
     // New Game
     document.getElementById('new-game-btn').addEventListener('click', function () {
       if (!confirm('Start a new game? This will clear all progress.')) return;
       localStorage.removeItem('scoresheet');
+      localStorage.removeItem('ctr-score');
       location.reload();
     });
 
@@ -786,6 +1010,11 @@
 
     // Load
     replayMoves(getMoves());
+    var savedCtrScore = localStorage.getItem('ctr-score');
+    if (savedCtrScore) {
+      var radio = document.querySelector('[name="ctr-score"][value="' + savedCtrScore + '"]');
+      if (radio) radio.checked = true;
+    }
 
     // Request fullscreen on first touch to hide browser chrome
     document.addEventListener('click', function goFS() {
