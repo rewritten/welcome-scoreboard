@@ -301,9 +301,9 @@
                 </svg>
               </span>
               <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
-              <label class="beauty-step"><input type="checkbox" name="r1-b1" class="hidden">2</label>
-              <label class="beauty-step"><input type="checkbox" name="r1-b2" class="hidden">4</label>
-              <label class="beauty-step"><input type="checkbox" name="r1-b3" class="hidden">10</label>
+              <label class="beauty-step"><input type="checkbox" name="r1-b1" class="hidden" value="2">2</label>
+              <label class="beauty-step"><input type="checkbox" name="r1-b2" class="hidden" value="4">4</label>
+              <label class="beauty-step"><input type="checkbox" name="r1-b3" class="hidden" value="10">10</label>
             </div>
           </section>
 
@@ -388,10 +388,10 @@
                 </svg>
               </span>
               <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
-              <label class="beauty-step"><input type="checkbox" name="r2-b1" class="hidden">2</label>
-              <label class="beauty-step"><input type="checkbox" name="r2-b2" class="hidden">4</label>
-              <label class="beauty-step"><input type="checkbox" name="r2-b3" class="hidden">6</label>
-              <label class="beauty-step"><input type="checkbox" name="r2-b4" class="hidden">14</label>
+              <label class="beauty-step"><input type="checkbox" name="r2-b1" class="hidden" value="2">2</label>
+              <label class="beauty-step"><input type="checkbox" name="r2-b2" class="hidden" value="4">4</label>
+              <label class="beauty-step"><input type="checkbox" name="r2-b3" class="hidden" value="6">6</label>
+              <label class="beauty-step"><input type="checkbox" name="r2-b4" class="hidden" value="14">14</label>
             </div>
           </section>
 
@@ -482,11 +482,11 @@
                 </svg>
               </span>
               <span class="w-8 h-8 text-xs font-semibold border-2 border-gray-300 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">0</span>
-              <label class="beauty-step"><input type="checkbox" name="r3-b1" class="hidden">2</label>
-              <label class="beauty-step"><input type="checkbox" name="r3-b2" class="hidden">4</label>
-              <label class="beauty-step"><input type="checkbox" name="r3-b3" class="hidden">6</label>
-              <label class="beauty-step"><input type="checkbox" name="r3-b4" class="hidden">8</label>
-              <label class="beauty-step"><input type="checkbox" name="r3-b5" class="hidden">18</label>
+              <label class="beauty-step"><input type="checkbox" name="r3-b1" class="hidden" value="2">2</label>
+              <label class="beauty-step"><input type="checkbox" name="r3-b2" class="hidden" value="4">4</label>
+              <label class="beauty-step"><input type="checkbox" name="r3-b3" class="hidden" value="6">6</label>
+              <label class="beauty-step"><input type="checkbox" name="r3-b4" class="hidden" value="8">8</label>
+              <label class="beauty-step"><input type="checkbox" name="r3-b5" class="hidden" value="18">18</label>
             </div>
           </section>
 
@@ -824,9 +824,9 @@
 
       // Parks — last checked beauty step per row
       let parksTotal = 
-        Math.max(0, ...Array.from(document.querySelectorAll(`[name^="r1-h"]:checked`)).map(h => parseInt(h.getAttribute('value')))) +
-        Math.max(0, ...Array.from(document.querySelectorAll(`[name^="r2-h"]:checked`)).map(h => parseInt(h.getAttribute('value')))) +
-        Math.max(0, ...Array.from(document.querySelectorAll(`[name^="r3-h"]:checked`)).map(h => parseInt(h.getAttribute('value'))));
+        Math.max(0, ...Array.from(document.querySelectorAll(`[name^="r1-b"]:checked`)).map(h => h.value)) +
+        Math.max(0, ...Array.from(document.querySelectorAll(`[name^="r2-b"]:checked`)).map(h => h.value)) +
+        Math.max(0, ...Array.from(document.querySelectorAll(`[name^="r3-b"]:checked`)).map(h => h.value));
 
       // Pools
       let poolValues = [0, 3, 6, 9, 13, 17, 21, 26, 31, 36];
